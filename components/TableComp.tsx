@@ -14,21 +14,23 @@ interface expenseProps {
   income: number;
   expense: number;
   error: boolean;
-  sno?: number;
+
 }
 
 interface TableCompProps {
   formEntries: FormEntry[];
   expense?: expenseProps;
   visible: boolean;
+  uniqueId:[]|any;
 }
 
 const TableComp: React.FC<TableCompProps> = ({
   formEntries,
   expense,
   visible,
+  uniqueId,
 }) => {
-const[uniqueId, setuniqueId]=useState(0);
+    // console.log("uniqueId", uniqueId)
 
   return (
     <>
@@ -50,7 +52,7 @@ const[uniqueId, setuniqueId]=useState(0);
                       <div className="space-x-2 px-2">
                         <button
                           onClick={() => {
-                            Edit({ id, formEntries });
+                            Edit({ uniqueId, formEntries });
                           }}
                         >
                           <Image
@@ -62,7 +64,7 @@ const[uniqueId, setuniqueId]=useState(0);
                         </button>
                         <button
                           onClick={() => {
-                            Delete({ sno:id, formEntries });
+                            Delete({ uniqueId, formEntries });
                           }}
                         >
                           <Image
@@ -95,7 +97,7 @@ const[uniqueId, setuniqueId]=useState(0);
                       <div className="space-x-2 px-2">
                         <button
                           onClick={() => {
-                            Edit({ sno:id, formEntries });
+                            Edit({ uniqueId, formEntries });
                           }}
                         >
                           <Image
@@ -107,7 +109,7 @@ const[uniqueId, setuniqueId]=useState(0);
                         </button>
                         <button
                           onClick={() => {
-                            Delete({ sno:id, formEntries });
+                            Delete({ uniqueId, formEntries });
                           }}
                         >
                           <Image

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import ErorComp from "./ErorComp";
 import TableComp from "./TableComp";
 
@@ -11,7 +12,6 @@ export default function HomeScreen() {
     income: 0,
     expense: 0,
     error: false,
-    sno:0,
   });
 
   const [errorMsg, seterrorMsg] = useState("");
@@ -20,12 +20,12 @@ export default function HomeScreen() {
     description: "",
     amount: 0,
     type: "positive",
-    
   });
 
   const [formEntries, setFormEntries] = useState<any>([]);
 
   const [visible, setVisible] = useState(false);
+  const [uniqueId, setuniqueId] = useState<any>([]);
 
   function handleFromclick(event: any) {
     const { name, value } = event.target;
@@ -39,6 +39,13 @@ export default function HomeScreen() {
     }));
   }
 
+  const uuidFromUuidV4 = () => {
+    const newUuid:string = uuidv4()
+    setuniqueId((prevData:any)=>{
+        return[...prevData, newUuid]
+    })
+  }
+
   function handleExpensechanges() {
     setExpense((prevState) => {
       if (formData.type === "positive") {
@@ -46,19 +53,16 @@ export default function HomeScreen() {
           ...prevState,
           totalAmount: prevState.totalAmount + formData.amount,
           income: prevState.income + formData.amount,
-          sno:prevState.sno+1,
         };
       } else if (
         formData.type === "negative" &&
         prevState.totalAmount > formData.amount
-        
       ) {
         return {
           ...prevState,
           totalAmount: prevState.totalAmount - formData.amount,
           income: prevState.income - formData.amount,
           expense: prevState.expense + formData.amount,
-          sno:prevState.sno+1,
         };
       } else if (
         formData.type === "negative" &&
@@ -89,15 +93,15 @@ export default function HomeScreen() {
       return;
     }
 
+    uuidFromUuidV4();
     handleExpensechanges();
     setVisible(true);
     // setFormEntries((prev: any) => ({ ...prev, formData }));
     setFormEntries((prevEntries: any) => [...prevEntries, formData]);
 
-
     // setFormEntries([...formEntries, formData]);
 
-    console.log("button");
+    // console.log("button");
 
     setFormData((prevState) => ({
       ...prevState,
@@ -106,11 +110,7 @@ export default function HomeScreen() {
     }));
   }
 
-  useEffect(() => {
-    // console.log("formEntries", formEntries);
-    // console.log("formdata", formData);
-    // console.log("expenses", expense);
-  }, [expense, formEntries]);
+  useEffect(() => {}, [expense, formEntries]);
 
   return (
     <div className="h-screen">
@@ -202,7 +202,7 @@ export default function HomeScreen() {
             formEntries={formEntries}
             expense={expense}
             visible={visible}
-            expense={expense}
+            uniqueId={uniqueId}
           />
         </div>
       </div>
